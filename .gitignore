@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+artifacts/
+workspaces/
+output/
+.playwright-cli/
+.DS_Store
+.env
+.env.*
+!.env.example
+examples/*/delivery/
+examples/*/runs/
+examples/*/build.json
+examples/*/latest-run.json
+examples/*/revisions.json

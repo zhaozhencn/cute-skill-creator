@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "name": "order-summary",
+  "version": "1.0.0",
+  "description": "根据用户提供的字段映射，校验本地订单 JSON 并汇总已支付订单数和金额。用于订单汇总，诗歌写作等无关请求不触发。",
+  "instructions": "# 订单汇总\n\n确认订单字段含义，接收 orders 和 mapping（amount/status 对应原始字段）。缺少字段含义时仅询问未知部分。\n\n调用 [汇总脚本](scripts/summarize.py)，JSON 通过 stdin 输入。只处理本地数据。脚本拒绝字段缺失、无效状态、负数、非有限数和超过两位小数的金额。paid 计入，cancelled 排除。\n\n返回 paid_count 和 total；输入非法时说明 error 并请用户修复，不猜测金额或映射。",
+  "requirements": [
+    {
+      "id": "goal",
+      "category": "goal",
+      "text": "运营人员准确汇总已支付订单金额。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "运营人员准确汇总已支付订单金额。"
+    },
+    {
+      "id": "io",
+      "category": "io",
+      "text": "输入订单 JSON 和字段映射；输出已支付订单数和金额。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "输入订单 JSON 和字段映射；输出已支付订单数和金额。"
+    },
+    {
+      "id": "flow",
+      "category": "flow",
+      "text": "确认字段映射后严格校验并汇总；无效输入拒绝。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "确认字段映射后严格校验并汇总；无效输入拒绝。"
+    },
+    {
+      "id": "rules",
+      "category": "rules",
+      "text": "仅 paid 计入金额，cancelled 排除；金额非负且最多两位小数。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "仅 paid 计入金额，cancelled 排除；金额非负且最多两位小数。"
+    },
+    {
+      "id": "environment",
+      "category": "environment",
+      "text": "仅处理本地数据，无外部写入，不需要额外人工批准。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "仅处理本地数据，无外部写入，不需要额外人工批准。"
+    },
+    {
+      "id": "acceptance",
+      "category": "acceptance",
+      "text": "正常汇总、空列表、非法映射和金额均符合预期；触发需真实模型验证。",
+      "status": "confirmed",
+      "critical": true,
+      "source": "本仓库演示业务规格，不代表用户真实业务",
+      "acceptance": "正常汇总、空列表、非法映射和金额均符合预期；触发需真实模型验证。"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "sum",
+      "input": "订单数组和用户已确认的 amount/status 字段映射",
+      "output": "paid_count 和两位小数 total；无效输入输出 error",
+      "mode": "code",
+      "reason": "映射由用户提供，金额汇总和字段规则完全确定",
+      "constraints": "仅 paid 计入金额，cancelled 排除；金额非负且最多两位小数。",
+      "validation": "精确 JSON 断言覆盖正常、空列表、缺字段与无效金额",
+      "failure": "拒绝非法输入，用户修复后重新执行；不写外部系统",
+      "human_intervention": "字段含义未知时向用户确认；已明确映射无需逐次批准",
+      "depends_on": [],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "normal",
+        "empty",
+        "invalid_mapping",
+        "invalid_amount"
+      ],
+      "scripts": [
+        "scripts/summarize.py"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "source": "summarize.py",
+      "target": "scripts/summarize.py"
+    }
+  ],
+  "tests": [
+    {
+      "id": "structure",
+      "purpose": "structure",
+      "required": true,
+      "layer": "structure",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [],
+      "input": null,
+      "expected": {
+        "imported": true,
+        "skill_exists": true
+      },
+      "command": [
+        "{python}",
+        "{workspace}/check_structure.py",
+        "{skill}"
+      ]
+    },
+    {
+      "id": "exact-money",
+      "purpose": "exact-money",
+      "required": true,
+      "layer": "node",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "sum:normal"
+      ],
+      "input": {
+        "orders": [
+          {
+            "price": "0.10",
+            "state": "paid"
+          },
+          {
+            "price": "0.20",
+            "state": "paid"
+          },
+          {
+            "price": "8.00",
+            "state": "cancelled"
+          }
+        ],
+        "mapping": {
+          "amount": "price",
+          "status": "state"
+        }
+      },
+      "expected": {
+        "paid_count": 2,
+        "total": "0.30"
+      },
+      "command": [
+        "{python}",
+        "{skill}/scripts/summarize.py"
+      ]
+    },
+    {
+      "id": "end-to-end",
+      "purpose": "end-to-end",
+      "required": true,
+      "layer": "e2e",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "sum:normal"
+      ],
+      "input": {
+        "orders": [
+          {
+            "price": "12.34",
+            "state": "paid"
+          },
+          {
+            "price": "3.66",
+            "state": "paid"
+          }
+        ],
+        "mapping": {
+          "amount": "price",
+          "status": "state"
+        }
+      },
+      "expected": {
+        "paid_count": 2,
+        "total": "16.00"
+      },
+      "command": [
+        "{python}",
+        "{skill}/scripts/summarize.py"
+      ]
+    },
+    {
+      "id": "empty",
+      "purpose": "empty",
+      "required": true,
+      "layer": "regression",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "sum:empty"
+      ],
+      "input": {
+        "orders": [],
+        "mapping": {
+          "amount": "price",
+          "status": "state"
+        }
+      },
+      "expected": {
+        "paid_count": 0,
+        "total": "0.00"
+      },
+      "command": [
+        "{python}",
+        "{skill}/scripts/summarize.py"
+      ]
+    },
+    {
+      "id": "bad-mapping",
+      "purpose": "bad-mapping",
+      "required": true,
+      "layer": "regression",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "sum:invalid_mapping"
+      ],
+      "input": {
+        "orders": [],
+        "mapping": {
+          "amount": "price"
+        }
+      },
+      "expected": {
+        "error": "候选映射必须包含 amount/status"
+      },
+      "command": [
+        "{python}",
+        "{skill}/scripts/summarize.py"
+      ]
+    },
+    {
+      "id": "bad-amount",
+      "purpose": "bad-amount",
+      "required": true,
+      "layer": "regression",
+      "mode": "code",
+      "nodes": [
+        "sum"
+      ],
+      "requirements": [
+        "goal",
+        "io",
+        "flow",
+        "rules",
+        "environment",
+        "acceptance"
+      ],
+      "branches": [
+        "sum:invalid_amount"
+      ],
+      "input": {
+        "orders": [
+          {
+            "price": "NaN",
+            "state": "paid"
+          }
+        ],
+        "mapping": {
+          "amount": "price",
+          "status": "state"
+        }
+      },
+      "expected": {
+        "error": "金额必须为非负、最多两位小数"
+      },
+      "command": [
+        "{python}",
+        "{skill}/scripts/summarize.py"
+      ]
+    },
+    {
+      "id": "trigger-positive",
+      "purpose": "真实模型正反向路由",
+      "required": true,
+      "layer": "trigger",
+      "mode": "ai",
+      "nodes": [],
+      "requirements": [
+        "goal"
+      ],
+      "branches": [],
+      "input": {
+        "request": "请根据字段映射汇总这批已支付订单"
+      },
+      "expected": true,
+      "command": null,
+      "repeats": 2,
+      "rubric": {
+        "routing": 1
+      },
+      "baseline": {
+        "kind": "no_skill",
+        "command": null
+      },
+      "blocked_reason": "未配置真实模型路由适配器；不能用字符串匹配代替"
+    },
+    {
+      "id": "trigger-negative",
+      "purpose": "真实模型正反向路由",
+      "required": true,
+      "layer": "trigger",
+      "mode": "ai",
+      "nodes": [],
+      "requirements": [
+        "goal"
+      ],
+      "branches": [],
+      "input": {
+        "request": "帮我写一首有关订单的诗"
+      },
+      "expected": false,
+      "command": null,
+      "repeats": 2,
+      "rubric": {
+        "routing": 1
+      },
+      "baseline": {
+        "kind": "no_skill",
+        "command": null
+      },
+      "blocked_reason": "未配置真实模型路由适配器；不能用字符串匹配代替"
+    }
+  ],
+  "test_resources": [
+    "check_structure.py"
+  ]
+}

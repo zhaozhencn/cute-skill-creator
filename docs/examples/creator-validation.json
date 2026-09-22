@@ -1,0 +1,22 @@
+{
+  "kind": "software-verification-snapshot",
+  "verification_run": "20260922T231621Z-2c5d08",
+  "software_verification_passed": true,
+  "unit_tests": {
+    "count": 56,
+    "returncode": 0
+  },
+  "static_issues": [],
+  "cli_checks_passed": true,
+  "unconfigured_ai_correctly_blocked": true,
+  "example_counts": {
+    "passed": 6,
+    "failed": 0,
+    "blocked": 2,
+    "not_run": 0
+  },
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "duration_seconds": 4.246282958,
+  "notice": "Unit-test AI adapters are synthetic protocol fixtures, not model quality evidence. See separate live evaluation.",
+  "reproduce": "make verify"
+}

@@ -1,0 +1,294 @@
+{
+  "kind": "historical-validation-snapshot",
+  "project": "order-analysis-insights",
+  "generated_by": "cute-skill-creator",
+  "run_id": "20260922T223214-4162dd4d",
+  "skill_fingerprint": "b0d6a99546fb86d53df84f0b752e262e0d93b67241a762688d1ec19f02e44697",
+  "data": "explicitly synthetic order and refund fixtures",
+  "cases_generated": true,
+  "static_passed": true,
+  "business_verified_for_this_run": true,
+  "counts": {
+    "passed": 35,
+    "failed": 0,
+    "blocked": 0,
+    "not_run": 0
+  },
+  "cases": [
+    {
+      "id": "structure",
+      "layer": "structure",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "manual-oracle",
+      "layer": "node",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "dedup-and-contribution",
+      "layer": "node",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "empty",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "coverage",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "zero-base",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "exact-large-money",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "duplicate-line",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "duplicate-refund",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "orphan-refund",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "over-refund",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "bad-refund-date",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "bad-currency",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "bad-money",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "bad-date",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "order-metadata",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "numeric-id",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "missing-and-quantity",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "xlsx-chinese",
+      "layer": "node",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "xlsx-formula",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "mapping",
+      "layer": "node",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "bad-headers",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "insight-validator",
+      "layer": "hybrid",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "html-csv-escaping",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "end-to-end",
+      "layer": "e2e",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "fail-closed-cli",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "no-overwrite",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "max-date",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "many-refund-months",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "unsupported-currency",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "corrupt-workbook",
+      "layer": "regression",
+      "status": "passed",
+      "candidate_runs": 1,
+      "baseline_runs": 0
+    },
+    {
+      "id": "trigger-positive",
+      "layer": "trigger",
+      "status": "passed",
+      "candidate_runs": 2,
+      "baseline_runs": 2,
+      "comparison": {
+        "baseline_kind": "no_skill",
+        "candidate_mean": 1.0,
+        "baseline_mean": 0.0,
+        "delta": 1.0
+      }
+    },
+    {
+      "id": "trigger-negative",
+      "layer": "trigger",
+      "status": "passed",
+      "candidate_runs": 2,
+      "baseline_runs": 2,
+      "comparison": {
+        "baseline_kind": "no_skill",
+        "candidate_mean": 1.0,
+        "baseline_mean": 1.0,
+        "delta": 0.0
+      }
+    },
+    {
+      "id": "live-insights-complete",
+      "layer": "hybrid",
+      "status": "passed",
+      "candidate_runs": 2,
+      "baseline_runs": 2,
+      "comparison": {
+        "baseline_kind": "no_skill",
+        "candidate_mean": 1.0,
+        "baseline_mean": 1.0,
+        "delta": 0.0
+      }
+    },
+    {
+      "id": "live-insights-incomplete",
+      "layer": "hybrid",
+      "status": "passed",
+      "candidate_runs": 2,
+      "baseline_runs": 2,
+      "comparison": {
+        "baseline_kind": "no_skill",
+        "candidate_mean": 1.0,
+        "baseline_mean": 1.0,
+        "delta": 0.0
+      }
+    }
+  ],
+  "limitations": [
+    "This is a historical result snapshot, not a replayable model test runner.",
+    "The sample does not validate real customer data or prove statistically significant superiority over the no-skill baseline.",
+    "Model generation and review used independent sessions of the same configured model; not a blind cross-model evaluation.",
+    "Client-side implicit skill discovery was not instrumented."
+  ]
+}
