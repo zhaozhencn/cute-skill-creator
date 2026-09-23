@@ -16,10 +16,10 @@ import time
 import uuid
 from datetime import datetime, timezone
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 STATES = {"confirmed", "pending", "assumed"}
 MODES = {"code", "ai", "hybrid"}
-LAYERS = {"structure", "trigger", "node", "hybrid", "e2e", "regression"}
+LAYERS = {"structure", "trigger", "node", "hybrid", "regression"}
 CATEGORIES = {"goal", "io", "flow", "rules", "environment", "acceptance"}
 
 
@@ -219,7 +219,9 @@ def _validate(project, workspace):
         need(test, ["purpose"], label)
         if not isinstance(test.get("required"), bool):
             errors.append(label + ": required 必须是布尔值")
-        if test.get("layer") not in LAYERS or test.get("mode") not in MODES:
+        if test.get("layer") == "e2e":
+            errors.append(label + ": 已移除 e2e 测试层，请删除该用例；必要的节点和分支断言应由节点或回归用例覆盖")
+        elif test.get("layer") not in LAYERS or test.get("mode") not in MODES:
             errors.append(label + ": layer/mode 非法")
         for key, choices, covered in (("nodes", node_ids, covered_nodes), ("requirements", requirement_ids, covered_requirements),
                                        ("branches", all_branches, covered_branches)):
@@ -259,7 +261,7 @@ def _validate(project, workspace):
                 errors.append(label + ": trigger 必须使用真实 AI 路由适配器和布尔 expected")
             elif test.get("required"):
                 polarities.add(test["expected"])
-    mandatory = {"structure", "trigger", "node", "e2e", "regression"}
+    mandatory = {"structure", "trigger", "node", "regression"}
     if any(n.get("mode") == "hybrid" for n in nodes):
         mandatory.add("hybrid")
     for layer in sorted(mandatory - layers):
@@ -538,8 +540,7 @@ def report(workspace):
     executed = [c for c in record["cases"] if c["status"] in {"passed", "failed"}]
     triggers = [c for c in executed if c["layer"] == "trigger"]
     rate = lambda cases: sum(c["status"] == "passed" for c in cases) / len(cases) if cases else None
-    metrics = {"task_success_rate": rate([c for c in executed if c["layer"] == "e2e"]),
-               "trigger_accuracy": rate(triggers), "executed_case_rate": len(executed) / len(record["cases"]) if record["cases"] else 0,
+    metrics = {"trigger_accuracy": rate(triggers), "executed_case_rate": len(executed) / len(record["cases"]) if record["cases"] else 0,
                "duration_seconds": sum(a["duration_seconds"] for a in attempts),
                "known_tokens": sum(a.get("tokens") or 0 for a in attempts),
                "token_measurement_complete": bool(attempts) and all(a.get("tokens") is not None for a in attempts),

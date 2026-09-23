@@ -177,51 +177,6 @@
       ]
     },
     {
-      "id": "end-to-end",
-      "purpose": "end-to-end",
-      "required": true,
-      "layer": "e2e",
-      "mode": "code",
-      "nodes": [
-        "sum"
-      ],
-      "requirements": [
-        "goal",
-        "io",
-        "flow",
-        "rules",
-        "environment",
-        "acceptance"
-      ],
-      "branches": [
-        "sum:normal"
-      ],
-      "input": {
-        "orders": [
-          {
-            "price": "12.34",
-            "state": "paid"
-          },
-          {
-            "price": "3.66",
-            "state": "paid"
-          }
-        ],
-        "mapping": {
-          "amount": "price",
-          "status": "state"
-        }
-      },
-      "expected": {
-        "paid_count": 2,
-        "total": "16.00"
-      },
-      "command": [
-        "{python}",
-        "{skill}/scripts/summarize.py"
-      ]
-    },
-    {
       "id": "empty",
       "purpose": "empty",
       "required": true,

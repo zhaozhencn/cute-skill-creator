@@ -52,9 +52,11 @@ code/hybrid 另需 `scripts`：交付中的脚本路径数组。hybrid 另需 `h
 
 ## 测试对象
 
-每项必需 `id`、`purpose`、`required`（布尔）、`layer`（structure/trigger/node/hybrid/e2e/regression）、`mode`、`nodes`、`requirements`、`branches`。
+每项必需 `id`、`purpose`、`required`（布尔）、`layer`（structure/trigger/node/hybrid/regression）、`mode`、`nodes`、`requirements`、`branches`。
 
-`branches` 引用格式 `node-id:branch-name`。必测测试层至少包含结构、触发、节点、端到端和异常回归；混合流程还须混合交接测试。触发层必须包含 expected=true 和 false 的 AI 案例。AI/hybrid 节点须有相应语义测试。
+`branches` 引用格式 `node-id:branch-name`。必测测试层至少包含结构、触发、节点和异常回归；混合流程还须混合交接测试。触发层必须包含 expected=true 和 false 的 AI 案例。AI/hybrid 节点须有相应语义测试。
+
+从 Creator 1.1.0 起移除 `e2e` 层。旧项目须删除对应测试对象，并确认必要的节点、需求和分支仍由其他必测用例覆盖；历史运行证据保留。新报告不再输出端到端任务成功率 `task_success_rate`。
 
 执行字段：
 

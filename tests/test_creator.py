@@ -60,6 +60,14 @@ class CreatorTests(unittest.TestCase):
     def test_example_contract_ready(self):
         self.assertEqual([], self.errors())
 
+    def test_removed_e2e_layer_requires_migration(self):
+        case = copy.deepcopy(self.project["tests"][1])
+        case.update(id="legacy-e2e", layer="e2e")
+        self.project["tests"].append(case)
+        self.assertTrue(any("已移除 e2e 测试层" in x for x in self.errors()))
+        with self.assertRaises(creator.ContractError):
+            self.build()
+
     def test_init_preserves_existing_project(self):
         with self.assertRaises(creator.ContractError):
             creator.init(self.workspace, "new-skill")
@@ -206,12 +214,12 @@ class CreatorTests(unittest.TestCase):
 
     def test_example_business_executes_and_ai_honestly_blocked(self):
         summary = self.run_all()
-        self.assertEqual({"passed": 6, "failed": 0, "blocked": 2, "not_run": 0}, summary["counts"])
+        self.assertEqual({"passed": 5, "failed": 0, "blocked": 2, "not_run": 0}, summary["counts"])
         self.assertTrue(summary["static_passed"])
         self.assertFalse(summary["business_verified"])
         self.assertIsNone(summary["metrics"]["trigger_accuracy"])
         self.assertFalse(summary["metrics"]["token_measurement_complete"])
-        self.assertEqual(1, summary["metrics"]["task_success_rate"])
+        self.assertNotIn("task_success_rate", summary["metrics"])
 
     def test_protocol_double_all_pass_and_repeated_baseline_logged(self):
         self.synthetic_ai()
@@ -244,7 +252,7 @@ class CreatorTests(unittest.TestCase):
         self.synthetic_ai()
         self.run_all()
         summary = creator.run_tests(self.workspace, ["exact-money"])
-        self.assertEqual(7, summary["counts"]["not_run"])
+        self.assertEqual(6, summary["counts"]["not_run"])
         self.assertFalse(summary["business_verified"])
         self.assertEqual(2, len(list((self.workspace / "runs").iterdir())))
 

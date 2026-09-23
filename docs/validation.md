@@ -1,5 +1,7 @@
 # 验证记录
 
+以下为移除端到端验证前的历史记录及快照，不代表当前版本的测试范围。当前 `make verify` 仅执行单元/回归测试与静态检查，不再执行 CLI 完整流程验证；最新结果见生成的 `artifacts/verification/latest.json`。当前订单汇总示例预期为 5 项通过、2 项模型触发测试阻塞。
+
 公开仓库保留可复现的源码、测试和精简验证快照：[创建器软件验证](examples/creator-validation.json)、[订单分析案例](order-analysis-case-study.md)。下文标注为“本地证据”的路径指创建时保留的运行记录，不包含在 GitHub 源码中；执行 `make verify` 可生成新的本地软件验证证据。
 
 验证日期：2026-09-23（Asia/Shanghai）。实现采用 Creator Skill + Python 3.9 标准库工具。软件验证通过；真实模型行为评估单独记录，未配置业务模型适配器的案例仍保持阻塞。
